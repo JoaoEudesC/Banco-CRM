@@ -18,3 +18,19 @@
 //18 - O delete nos tambem temos a função findById e ele ja deleta tambem , de maneira simplificada , parecido com o di upadate que é o put e patch (a estrutura do delete e do upadate são muito parecidas , quase iguais na verdade so mudando o verbo http)
 //19 - no delete nao temos o costume de enviar os dados do usuario deletado , somente um codigo , com uma mensagem escrita , codigo deletado com sucesso
 //20 - no user Schema precisamos incluir e fazer a formtação do id , para que a gente possa utilizalo e mostralo e adicionar um novo quando for adicionar os usuarios
+//21 - para eu retornar na somente dados que eu desejo , eu devo utilizar o funçao "FILTER" onde eu passo o userSchema
+//22 - para importar o dotenv como eu fiz no auth , eu tenho que usar o * porque eu estou importando ele da pasta raiz , porém , eu também poderia utilizar através do metodo require
+//23 - no authController é onde eu faço a validação do usuário através do jwt , e coloco o meu secret atraves do dotenv para que o meu token fique seguro na subida da aplicação e fique mais dificil alguem copiar ou roubar
+//24 - Posso utilizar o erro 401 para enviar a mensagem que quer dizer , usuário não encontrado
+//25 - a exclamação na variável usuário no item de validação , quer dizer que se vier uma coisa diferente daquele usuário , irá retornar aquela mensagem de erro
+//26 - Eu uso o bcrypt importado no auth para fazer uma comparação sincrona entre as hashes para fazer a validação da senha do usuário
+//27 - na validção da senha não é preciso passar o data no if, pois se o usuário nao está autorizado , é sinal de que o email está certo , então a boa prática é retornar statusCode  e mensagem
+//28 - Na Criação do token, nos utilizamos o jwt que foi baixado pelo npm, , com o jwt.sign ( dentro do parenteses nos passamos dois parametros , que será atraves daquele parametro que será feita a localização do usuario) ( o segundo parametro será o nosso secret , que é o salt que nos colocamos no .env parafazer o salt junto com o token e crialo hasheando o que a gente passou com o secret)
+//29 - Na Validação do token , eu tenho que passar o status code de 200 , ou seja , verificado com sucesso a requisição foi bem sucedida , junto com o data , e dentro deste data tenho que passar o meu token criado
+//30 - Tenho que importar o arquivo authCotroller no arquivo router , para criar uma rota para ele , atraves do metodo post , que é para onde eu irei enviar os dados
+//31 - Para eu conseguir utilizar a sintaxe do node modules no nodeJs ou seja (export default and import express from "express") ou seja , a sintaxe que já é utilizada no react por conta do babel  eu preciso e no arquivo package json e adicionar o comando "type":module,
+//32 - A forma que eu acho mais fácil para a criação de um controller => é criar ele como um objeto vázio no controller e em  seguida passa-lo exporta-lo como module exports , para usar ele como modulo no router e eu poder , escrever qualquer função nele e passar para o router de forma simplificada
+//33 - passo a passo da criação da api ( 1 - fazer o crud , com as especificações que você deseja , 2 - separar dois arquivos de controller , um para autenticação jwt e outro para passar as funções do crud , 3- montar a arquitetura mvc)
+//34 - na criação do controller eu nao exporto a função e sim o controller em si e a função acompanha ele ( do jeito da tera é exportar a funçao e utilizar ela com o authcontroller)
+//35 - o ultimo passo da verificação é verificar se existe um token na nossa requisição
+//36 - desenvolver o costume de utilizar na validação por exemplo (console.log(validationsenha) => para ver o que irá acontecer na requisição , console.log(req.body.password => para ver qual foi a senha cadastrada naquela requisição , console.log(usuario)=> para retornar o usuario cadstrado ))

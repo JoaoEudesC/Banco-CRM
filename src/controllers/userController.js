@@ -1,10 +1,13 @@
+//Passando o userController como objeto vazio para depois exportalo como module e utilizar ele no router
 const userController = {}
+
+//importando modulos
 const Bcrypt = require("bcrypt")
 const UserSchema = require("../models/userSchema")
 
 
 
-// Rota que irá pegar todos os usuários do banco de dados cadastrados(READ - GET)
+// Rota que irá pegar todos os usuários do banco de dados cadastrados (READ - GET)
 userController.getAll =  (req ,res) =>{
     UserSchema.find(function(err , users){
         if(err){
@@ -13,6 +16,62 @@ userController.getAll =  (req ,res) =>{
         res.status(200).send(users)
     })
 }
+
+
+//Rota que irá pegar todos os usuários pelo seu id (GET - READ.ID)
+
+userController.getUserById = async(req , res) =>{
+    try{
+        const user = await UserSchema.findById(req.params.id , req.body);
+
+        res.status(200).json({
+            statusCode: 200,
+            message: "User Localizado com sucesso",
+            data:{
+                user,
+            },
+        });
+    }catch(err){
+        console.log(err);
+    }
+};
+
+
+//Rota que irá pegar o usuário pelo seu id e enviar somente o email a mensagem e o statatus code como resposta => podemos colocar muitas outras possibilidades, como selecionar o usuariário por qualquer dado que foi adicionado no banco de dados , ou pega-lo pelo id e mostrar somente o nome do usuario como retorno
+userController.getUserByIdAndShowEmail = async(req , res) =>{
+    try{
+        const user = await UserSchema.findById(req.params.id , req.body);
+
+        res.status(200).json({
+            statusCode: 200,
+            message: "User Localizado com sucesso",
+            usuario: user.Email
+        });
+    }catch(err){
+        console.log(err);
+    }
+};
+
+//Rota que irá pegar os usuarios pelo seu email , e mostrar as informações do usuário completo => podemos fazer várias possibilidades como pegar o usuário por qualquer dados que desejarmos e ele esteja no banco de dados
+userController.getUserByEmail = async(req , res) =>{
+    try{
+        const user = await UserSchema.find(req.params.Email , req.body);
+
+        res.status(200).json({
+            statusCode: 200,
+            message: "User Localizado com sucesso",
+            data:{
+                user,
+            },
+        });
+    }catch(err){
+        console.log(err);
+    }
+};
+
+
+
+
 
 // Rota que irá fazer o metodo post para a criação de um novo usuário(POST) com a utilização do bcrypt( portando há duas maneiras de se utilizar o bcryptt)
 
@@ -61,7 +120,7 @@ userController.updateUserById = async(req , res) =>{
     }catch(err){
         console.log(err);
     }
-};
+}; 
 
 
 //Rota que irá apagar o usuário do banco de dados(DELETE)
