@@ -1,10 +1,12 @@
 const mongoose = require ("mongoose")
 const bcrypt = require("bcrypt")
 
+const joi = require("joi")
+
 
 const userSchema = new mongoose.Schema(
     {
-        id: mongoose.Schema.Types.ObjectId,
+        id:mongoose.Schema.Types.ObjectId,
         NomeCompleto:{
             type:String,
             required:true
@@ -12,7 +14,8 @@ const userSchema = new mongoose.Schema(
 
         Email:{
             type:String,
-            required: true
+            required: true, 
+            
         },
         Password:{
             type:String,
@@ -49,8 +52,12 @@ const userSchema = new mongoose.Schema(
 )
 
 
-//Utilização do bcrypt para hashear a senha do usuário no banco de dados(Portando há duas maneiras de se utilizar o bcrypt)
+//Utilização do joi para validação de usuário
 
+
+
+
+//Utilização do bcrypt para hashear a senha do usuário no banco de dados(Portando há duas maneiras de se utilizar o bcrypt)
 userSchema.pre('save' , async function(next){
     this.Password = await bcrypt.hash(this.Password , 10);
     next();

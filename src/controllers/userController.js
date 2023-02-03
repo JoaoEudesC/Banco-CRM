@@ -6,8 +6,8 @@ const Bcrypt = require("bcrypt")
 const UserSchema = require("../models/userSchema")
 
 
-
 // Rota que irá pegar todos os usuários do banco de dados cadastrados (READ - GET)
+
 userController.getAll =  (req ,res) =>{
     UserSchema.find(function(err , users){
         if(err){
@@ -38,6 +38,7 @@ userController.getUserById = async(req , res) =>{
 
 
 //Rota que irá pegar o usuário pelo seu id e enviar somente o email a mensagem e o statatus code como resposta => podemos colocar muitas outras possibilidades, como selecionar o usuariário por qualquer dado que foi adicionado no banco de dados , ou pega-lo pelo id e mostrar somente o nome do usuario como retorno
+
 userController.getUserByIdAndShowEmail = async(req , res) =>{
     try{
         const user = await UserSchema.findById(req.params.id , req.body);
@@ -52,33 +53,12 @@ userController.getUserByIdAndShowEmail = async(req , res) =>{
     }
 };
 
-//Rota que irá pegar os usuarios pelo seu email , e mostrar as informações do usuário completo => podemos fazer várias possibilidades como pegar o usuário por qualquer dados que desejarmos e ele esteja no banco de dados
-userController.getUserByEmail = async(req , res) =>{
-    try{
-        const user = await UserSchema.find(req.params.Email , req.body);
-
-        res.status(200).json({
-            statusCode: 200,
-            message: "User Localizado com sucesso",
-            data:{
-                user,
-            },
-        });
-    }catch(err){
-        console.log(err);
-    }
-};
-
-
-
-
-
 // Rota que irá fazer o metodo post para a criação de um novo usuário(POST) com a utilização do bcrypt( portando há duas maneiras de se utilizar o bcryptt)
 
 
 userController.createUser = async (req , res)=>{
 
-    const hashedPassword = Bcrypt.hashSync(req.body.Password, 10);
+    const hashedPassword =   Bcrypt.hashSync(req.body.Password, 10);
     req.body.Password = hashedPassword
 
     try{
@@ -101,8 +81,6 @@ userController.createUser = async (req , res)=>{
     }
 
 };
-
-
 
 //Rota que irá fazer  update do Usuário ja existente(UPDATE - PUT)
 
@@ -140,6 +118,15 @@ userController.deleteUserById = async(req, res)=>{
         });
     }
 };
+
+//Rota de validação do token com sucesso (POST) => essa seria uma outra maneira de fazer , passando uma unica função para exibir a mensagem de exito do token, e passando duas funções na rota autenticada , uma do userController e outra do authController , porém optei por passar um else com esta mesma mensagem no authController , e passar uma unica função do authController na rotaAutenticada
+
+userController.rotaAutenticada =  (req , res) =>{
+    res.status(200).json({
+        statusCode:200,
+        message:"Rota autenticada"
+    })
+}
 
 
 

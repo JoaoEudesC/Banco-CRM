@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken")
 //confin do dotenv
 require("dotenv").config();
 
+
+
 //transformando o authController em um objeto vázio , para depois exportalo como modulo e utilizar no router
 const authController = {}
 
@@ -19,10 +21,10 @@ const SECRET = process.env.SECRET
 
 
 //fazendo o login
-authController.login = ( req , res) =>{
+authController.login =  ( req , res) =>{
     try{
         //Validação de email
-        userSchema.findOne({Email:req.body.Email}, (error , usuario) =>{
+        userSchema.findOne({Email:req.body.Email},   (error , usuario) =>{
 
 
             if(!usuario){
@@ -36,8 +38,8 @@ authController.login = ( req , res) =>{
             }
             //Validação de Senha
 
-            const ValidationPassword = bcrypt.compareSync(req.body.Password , usuario.Password)
-            console.log(req.body.Password)
+            const ValidationPassword =  bcrypt.compare(req.body.Password , usuario.Password)
+            
             if(!ValidationPassword){
                 return res.status(401).json({
                     statusCode:401,
@@ -46,6 +48,7 @@ authController.login = ( req , res) =>{
             }
             
             //Criação de token
+            
             const token = jwt.sign({NomeCompleto:usuario.NomeCompleto} , SECRET)
             res.status(200).json({
                 statusCode:200,
@@ -68,6 +71,43 @@ authController.login = ( req , res) =>{
     }
 };
 
+//Função de verificação do token , é um midleware => você vai passar a função por ela antes de ir para a função inicial , ou seja , antes de ele passar pela função de criar usuário , ele vai passar pela função de verificar token
+
+    authController.tokenVerification = (req , res , next)=>{
+        const tokenHeader = req.headers["authorization"]
+        const token = tokenHeader && tokenHeader.split(" ")[1];
+
+
+        if(!token){
+            return res.status(401).json({
+                statusCode:401,
+                message:"Não autorizado"
+            })
+        }
+
+        
+        /*else{
+            res.status(200).json({
+                statusCode:200,
+                message:"Rota autenticada"
+            })
+        }*/
+
+        try{
+            jwt.verify(token , SECRET)
+            next()
+
+
+
+
+        }catch(error){
+            console.error(error);
+            res.status(500).json({
+                statusCode:500,
+                message:"token não valido"
+            })
+        }
+    }
 
 
 
